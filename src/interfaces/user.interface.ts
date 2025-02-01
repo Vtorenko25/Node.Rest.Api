@@ -12,5 +12,7 @@ export interface IUser {
     updatedAt: Date;
 }
 
-export interface IUsersDto extends Pick<IUser, "name" | "email" | "password"> {}
+export type IUserCreateDto = Pick<IUser, "name" | "email" | "age" | "password" | "phone">;
+
+export type IUserUpdateDto = Pick<IUser,   "name" | "age" | "phone">
 

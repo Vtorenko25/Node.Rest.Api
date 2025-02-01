@@ -1,29 +1,14 @@
 import { userRepository } from "../repositories/user.repository";
 import {ApiError} from "../errors/api.error";
-import {IUser, IUsersDto} from "../interfaces/user.interface";
+import {IUser, IUserCreateDto, IUserUpdateDto} from "../interfaces/user.interface";
 
 class UserService {
     public async getList(): Promise<IUser[]> {
         return await userRepository.getList();
     }
 
-    public async create(dto: IUsersDto): Promise<IUser> {
-        if (!dto.name || dto.name.length < 3) {
-            throw new ApiError(
-                "Name is required and should be minimum 3 symbols",
-                400,
-            );
-        }
-        if (!dto.email || !dto.email.includes("@")) {
-            throw new ApiError("Email is required", 400);
-        }
-        if (!dto.password || dto.password.length < 8) {
-            throw new ApiError(
-                "Password is required and should be minimum 8 symbols",
-                400,
-            );
-        }
-
+    public async create(dto: IUserCreateDto): Promise<IUser> {
+        await this.isEmailUnique(dto.email);
         return await userRepository.create(dto);
     }
 
@@ -35,23 +20,15 @@ class UserService {
         return user;
     }
 
-    public async updateUser(userId: string, dto:IUsersDto): Promise<IUser> {
-        if (!dto.name || dto.name.length < 3) {
-            throw new ApiError(
-                "Name is required and should be minimum 3 symbols",
-                400,
-            );
+    public async getByEmail(email: string): Promise<IUser> {
+        const user = await userRepository.getByEmail(email);
+        if(!email){
+            throw new ApiError("user not found", 404);
         }
-        if (!dto.email || !dto.email.includes("@")) {
-            throw new ApiError("Email is required", 400);
-        }
-        if (!dto.password || dto.password.length < 8) {
-            throw new ApiError(
-                "Password is required and should be minimum 8 symbols",
-                400,
-            );
-        }
+        return user;
+    }
 
+    public async updateUser(userId: string, dto:IUserUpdateDto): Promise<IUser> {
         const user = await userRepository.getById(userId);
         if (!user) {
             throw new ApiError("User not found", 404);
@@ -66,6 +43,13 @@ class UserService {
         }
         // @ts-ignore
         await userRepository.deleteById(userId);
+    }
+
+    private async isEmailUnique(email: string): Promise<void> {
+        const user = await userRepository.getByEmail(email);
+        if(user){
+            throw new ApiError("email is already in use", 409);
+        }
     }
 }
 
