@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
 import { userService } from "../services/user.service";
-import {IUserCreateDto, IUserUpdateDto} from "../interfaces/user.interface";
+import { IUserUpdateDto} from "../interfaces/user.interface";
+import {ITokenPayload} from "../interfaces/token.interface";
 
 
 class UserController {
@@ -9,16 +10,6 @@ class UserController {
         try {
             const result = await userService.getList();
             res.json(result);
-        } catch (e) {
-            next(e);
-        }
-    }
-
-    public async create(req: Request, res: Response, next: NextFunction) {
-        try {
-            const dto = req.body as IUserCreateDto;
-            const result = await userService.create(dto);
-            res.status(201).json(result);
         } catch (e) {
             next(e);
         }
@@ -34,7 +25,17 @@ class UserController {
         }
     }
 
-    public async getUserByEmail(req: Request, res: Response, next: NextFunction) {
+    public async getMe(req: Request, res: Response, next: NextFunction) {
+        try {
+            const tokenPeyload = req.res.locals.tokenPeyload as ITokenPayload;
+            const result = await userService.getMe(tokenPeyload);
+            res.status(200).json(result);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async getMeEmail(req: Request, res: Response, next: NextFunction) {
         try {
             const { userEmail } = req.params; // Отримуємо email з params
 
@@ -54,20 +55,20 @@ class UserController {
         }
     }
 
-    public async updateUser(req: Request, res: Response, next: NextFunction) {
+    public async updateMe(req: Request, res: Response, next: NextFunction) {
         try {
-            const userId = req.params.userId;
+            const tokenPeyload = req.res.locals.tokenPeyload as ITokenPayload;
             const dto = req.body as IUserUpdateDto;
-            const result = await userService.updateUser(userId, dto);
+            const result = await userService.updateMe(tokenPeyload, dto);
             res.status(201).json(result);
         } catch (e) {
             next(e);
         }
     }
-    public async deleteUser(req: Request, res: Response, next: NextFunction) {
+    public async deleteMe(req: Request, res: Response, next: NextFunction) {
         try {
-            const userId = req.params.userId;
-            await userService.deleteUser(userId);
+            const tokenPeyload = req.res.locals.tokenPeyload as ITokenPayload;
+            await userService.deleteMe(tokenPeyload);
             res.sendStatus(204);
         } catch (e) {
             next(e);
