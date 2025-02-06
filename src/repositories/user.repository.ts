@@ -1,3 +1,4 @@
+import { FilterQuery } from "mongoose";
 import {
   IUser,
   IUserCreateDto,
@@ -5,9 +6,18 @@ import {
 } from "../interfaces/user.interface";
 import { User } from "../models/user.model";
 
+
 class UserRepository {
-  public async getList(): Promise<IUser[]> {
-    return await User.find();
+  public async getList(query): Promise<IUser[]> {
+    const filterObj: FilterQuery<IUser> = { isDeleted: false };
+    if (query.search) {
+      filterObj.$or = [
+        { name: { $regex: query.search, $options: "i" } },
+        { email: { $regex: query.search, $options: "i" } },
+      ];
+
+    }
+    return await User.find(filterObj);
   }
 
   public async create(dto: IUserCreateDto): Promise<IUser> {
@@ -29,6 +39,7 @@ class UserRepository {
   public async deleteById(userId: string): Promise<void> {
     await User.deleteOne({ _id: userId });
   }
+
 }
 
 export const userRepository = new UserRepository();

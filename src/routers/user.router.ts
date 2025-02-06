@@ -7,7 +7,10 @@ import { UserValidator } from "../validators/user.validator";
 
 const router = Router();
 
-router.get("/", authMiddleware.checkAccessToken, userController.getList);
+router.get("/",
+    authMiddleware.checkAccessToken,
+    userController.getList
+);
 
 router.get(
   "/me",
@@ -36,5 +39,6 @@ router.get(
   commonMiddleware.isIdValid("userId"),
   userController.getUserById,
 );
+
 
 export const userRouter = router;

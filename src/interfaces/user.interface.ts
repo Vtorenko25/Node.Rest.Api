@@ -16,5 +16,6 @@ export interface IUser {
 
 export type IUserCreateDto = Pick<IUser, "name" | "email" | "age" | "password" | "phone">;
 
-export type IUserUpdateDto = Pick<IUser,   "name" | "age" | "phone">
+export type IUserUpdateDto = Pick<IUser,   "name" | "age" | "phone">;
+export type ILogin = Pick<IUser, "email" | "password">;
 

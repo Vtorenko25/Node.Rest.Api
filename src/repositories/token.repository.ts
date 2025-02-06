@@ -13,6 +13,10 @@ class TokenRepository {
   public async deleteOne(params: Partial<IToken>): Promise<void> {
     await Token.deleteOne(params);
   }
+
+  public async deleteOneByParams(params: Partial<IToken>): Promise<void> {
+    await Token.deleteOne(params);
+  }
 }
 
 export const tokenRepository = new TokenRepository();

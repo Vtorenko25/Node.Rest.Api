@@ -15,9 +15,13 @@ router.post(
 
 router.post(
   "/sign-in",
-  // commonMiddleware.validateBody(UserValidator.create),
+  commonMiddleware.validateBody(UserValidator.login),
   authController.signIn,
 );
+
+router.post("/refresh",
+    authMiddleware.checkAccessToken,
+    authController.refresh);
 
 router.post("/log-out", authMiddleware.checkAccessToken, authController.logout);
 

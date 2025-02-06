@@ -7,7 +7,8 @@ import { userService } from "../services/user.service";
 class UserController {
   public async getList(req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await userService.getList();
+      const query = req.query;
+      const result = await userService.getList(query);
       res.json(result);
     } catch (e) {
       next(e);
@@ -52,10 +53,9 @@ class UserController {
 
   public async updateMe(req: Request, res: Response, next: NextFunction) {
     try {
-      const tokenPeyload = req.res.locals.tokenPeyload as ITokenPayload;
+      const tokenPayload = req.res.locals.tokenPayload as ITokenPayload;
       const dto = req.body as IUserUpdateDto;
-      // console.log(dto);
-      const result = await userService.updateMe(tokenPeyload, dto);
+      const result = await userService.updateMe(tokenPayload, dto);
       res.status(201).json(result);
     } catch (e) {
       next(e);
@@ -63,8 +63,8 @@ class UserController {
   }
   public async deleteMe(req: Request, res: Response, next: NextFunction) {
     try {
-      const tokenPeyload = req.res.locals.tokenPeyload as ITokenPayload;
-      await userService.deleteMe(tokenPeyload);
+      const tokenPayload = req.res.locals.tokenPayload as ITokenPayload;
+      await userService.deleteMe(tokenPayload);
       res.sendStatus(204);
     } catch (e) {
       next(e);

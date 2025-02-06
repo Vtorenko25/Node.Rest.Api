@@ -4,8 +4,8 @@ import { IUser, IUserUpdateDto } from "../interfaces/user.interface";
 import { userRepository } from "../repositories/user.repository";
 
 class UserService {
-  public async getList(): Promise<IUser[]> {
-    return await userRepository.getList();
+  public async getList(query): Promise<IUser[]> {
+    return await userRepository.getList(query);
   }
 
   public async getUserById(userId: string): Promise<IUser> {
@@ -33,10 +33,10 @@ class UserService {
   }
 
   public async updateMe(
-    tokenPeyload: ITokenPayload,
-    dto: IUserUpdateDto,
+      tokenPayload: ITokenPayload,
+      dto: IUserUpdateDto,
   ): Promise<IUser> {
-    const user = await userRepository.getById(tokenPeyload.userId);
+    const user = await userRepository.getById(tokenPayload.userId);
     if (!user) {
       throw new ApiError("User not found", 404);
     }
@@ -57,6 +57,9 @@ class UserService {
       throw new ApiError("email is already in use", 409);
     }
   }
+
+
+
 }
 
 export const userService = new UserService();
