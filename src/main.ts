@@ -4,6 +4,7 @@ import {userRouter} from "./routers/user.router";
 import {config} from "./configs/config";
 import * as mongoose from "mongoose";
 import {authRouter} from "./routers/auth.router";
+import {postsRouter} from "./routers/posts.router";
 
 
 const app = express();
@@ -11,6 +12,7 @@ app.use(express.json());
 
 app.use("/auth", authRouter)
 app.use("/users", userRouter);
+app.use("/posts", postsRouter);
 
 app.use(
     "*",
