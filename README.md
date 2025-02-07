@@ -26,9 +26,8 @@ JWT_ACCESS_SECRET=
 JWT_ACCESS_EXPIRES_IN=
 JWT_REFRESH_SECRET=
 JWT_REFRESH_EXPIRES_IN=
-5. Для запуску сервера в режимі розробки:
-npm run watch:server
-Ця команда запустить сервер на порту, вказаному в .env файлі (за замовчуванням — порт 3000).
+
+Проект запустить сервер на порту, вказаному в .env файлі (за замовчуванням — порт 3000).
 
 
 API
