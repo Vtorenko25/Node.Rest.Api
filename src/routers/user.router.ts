@@ -25,6 +25,12 @@ router.get(
     userController.getMeEmail.bind(userController),
 );
 
+router.get(
+    "/getByName",
+    authMiddleware.checkAccessToken,
+    userController.getByName.bind(userController),
+);
+
 router.put(
   "/me",
   authMiddleware.checkAccessToken,

@@ -24,6 +24,10 @@ class UserService {
     return user;
   }
 
+  public async getListByName(name: string): Promise<IUser[]> {
+    return await userRepository.getByName(name);
+  }
+
   public async getMe(tokenPeyload: ITokenPayload): Promise<IUser> {
     const user = await userRepository.getById(tokenPeyload.userId);
     if (!user) {

@@ -56,7 +56,7 @@ API
 4. Отримати список всіх user
    GET /users/
 5. Фільтрація користувача по імені
-   GET users?name=john
+   GET users/getByName?name=john
    Опис: (необхідна авторизація через JWT)
 6. Фільтрація користувача по email
    GET users/getMeEmail?email=Johnfffddf@gmail.com

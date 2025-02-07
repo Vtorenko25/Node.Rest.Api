@@ -51,6 +51,22 @@ class UserController {
     }
   }
 
+  public async getByName(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { name } = req.query;  // Отримуємо параметр name з query
+      if (!name) {
+        return res.status(400).json({ message: "Name is required" });
+      }
+      const users = await userService.getListByName(name as string);  // Викликаємо сервіс для пошуку
+      if (users.length === 0) {
+        return res.status(404).json({ message: "No users found" });
+      }
+      res.status(200).json(users);
+    } catch (e) {
+      next(e);
+    }
+  }
+
   public async updateMe(req: Request, res: Response, next: NextFunction) {
     try {
       const tokenPayload = req.res.locals.tokenPayload as ITokenPayload;

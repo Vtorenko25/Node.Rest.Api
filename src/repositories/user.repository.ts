@@ -32,6 +32,10 @@ class UserRepository {
     return await User.findOne({ email });
   }
 
+  public async getByName(name: string): Promise<IUser[]> {
+    return await User.find({ name: { $regex: name, $options: "i" }, isDeleted: false });
+  }
+
   public async updateById(userId: string, dto: IUserUpdateDto): Promise<IUser> {
     return await User.findByIdAndUpdate(userId, dto, { new: true });
   }
