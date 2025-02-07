@@ -1,0 +1,503 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API для користувачів та постів",
+    "version": "1.0.0",
+    "description": "API для роботи з користувачами та постами, включаючи авторизацію"
+  },
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Операції для авторизації користувачів"
+    },
+    {
+      "name": "users",
+      "description": "Операції для роботи з користувачами"
+    },
+    {
+      "name": "posts",
+      "description": "Операції для роботи з постами"
+    }
+  ],
+  "paths": {
+    "/auth/sign-up": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Реєстрація нового користувача",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignUp"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Користувач зареєстрований"
+          },
+          "400": {
+            "description": "Невірний формат даних"
+          },
+          "409": {
+            "description": "email вже існує в БД"
+          }
+        }
+      }
+    },
+    "/auth/sign-in": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Авторизація користувача",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успішна авторизація"
+          },
+          "401": {
+            "description": "Невірні дані для авторизації"
+          },
+          "404": {
+            "description": "Користувач не знайдений"
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Оновлення токена",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Токен оновлений"
+          },
+          "401": {
+            "description": "Неавторизований"
+          }
+        }
+      }
+    },
+    "/auth/log-out": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Вихід користувача",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Вихід відбувається за допомогою токена",
+        "responses": {
+          "200": {
+            "description": "Користувач вийшов успішно"
+          },
+          "401": {
+            "description": "Неавторизований"
+          }
+        }
+      }
+    },
+    "/users/": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Отримати список користувачів",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список користувачів",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Неавторизований"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Отримати користувача за ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "607d1b2f8b3a0e8a717a7766"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Користувач знайдений",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Неавторизований"
+          },
+          "404": {
+            "description": "Користувач не знайдений"
+          }
+        }
+      }
+    },
+    "/users/{email}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Отримати користувача за email",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "user@example.com"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Користувач знайдений",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Неавторизований"
+          },
+          "404": {
+            "description": "Користувач не знайдений"
+          }
+        }
+      }
+    },
+    "/posts/": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "Отримати всі пости",
+        "responses": {
+          "200": {
+            "description": "Список постів",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/posts/create": {
+      "post": {
+        "tags": ["posts"],
+        "summary": "Створити пост",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Пост створено"
+          },
+          "400": {
+            "description": "Невірний формат даних"
+          }
+        }
+      }
+    },
+    "/posts/me": {
+      "put": {
+        "tags": ["posts"],
+        "summary": "Оновити пост поточного користувача",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Пост оновлений"
+          },
+          "400": {
+            "description": "Невірний формат даних"
+          },
+          "401": {
+            "description": "Неавторизований"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["posts"],
+        "summary": "Видалити пост поточного користувача",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Пост видалений"
+          },
+          "401": {
+            "description": "Неавторизований"
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "put": {
+        "tags": ["users"],
+        "summary": "Оновити дані поточного користувача",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Дані користувача оновлено"
+          },
+          "400": {
+            "description": "Невірний формат даних"
+          },
+          "401": {
+            "description": "Неавторизований"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["users"],
+        "summary": "Видалити поточного користувача",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Користувач видалений"
+          },
+          "401": {
+            "description": "Неавторизований"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserSignUp": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "john.doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123"
+          },
+          "age": {
+            "type": "integer",
+            "example": 25
+          }
+        },
+        "required": ["name", "email", "password", "age"]
+      },
+      "UserSignIn": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "john.doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123"
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "UserUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Updated Name"
+          },
+          "email": {
+            "type": "string",
+            "example": "updated.email@example.com"
+          },
+          "age": {
+            "type": "integer",
+            "example": 26
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "607d1b2f8b3a0e8a717a7766"
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "john.doe@example.com"
+          },
+          "age": {
+            "type": "integer",
+            "example": 25
+          }
+        }
+      },
+      "PostCreate": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Post Title"
+          },
+          "content": {
+            "type": "string",
+            "example": "This is the content of the post"
+          }
+        },
+        "required": ["title", "content"]
+      },
+      "PostUpdate": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Updated Post Title"
+          },
+          "content": {
+            "type": "string",
+            "example": "Updated content of the post"
+          }
+        }
+      },
+      "Post": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "60c72b2f5f9a2f2b8f32c8b4"
+          },
+          "title": {
+            "type": "string",
+            "example": "Post Title"
+          },
+          "content": {
+            "type": "string",
+            "example": "This is the content of the post"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

@@ -16,11 +16,11 @@ class PostRepository {
     }
 
     public async getUserPost(userId: string): Promise<IPost | null> {
-        return await Post.findOne({ _userId: userId }); // Пошук поста за _userId
+        return await Post.findOne({ _userId: userId });
     }
 
     public async deleteByUserId(userId: string): Promise<void> {
-        await Post.deleteOne({ _userId: userId }); // Видалення поста за _userId
+        await Post.deleteOne({ _userId: userId });
     }
 
     public async updateByUserId(userId: string, dto: Partial<IPost>): Promise<IPost> {

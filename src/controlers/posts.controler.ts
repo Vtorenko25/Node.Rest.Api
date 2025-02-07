@@ -30,7 +30,7 @@ class PostController {
     public async deleteMe(req: Request, res: Response, next: NextFunction) {
         try {
             const tokenPayload = req.res.locals.tokenPayload as ITokenPayload;
-            await postService.deleteMe(tokenPayload.userId); // Передаємо `userId`
+            await postService.deleteMe(tokenPayload.userId);
             res.sendStatus(204);
         } catch (e) {
             next(e);
@@ -39,8 +39,8 @@ class PostController {
 
     public async updateMe(req: Request, res: Response, next: NextFunction) {
         try {
-            const userId = req.res.locals.tokenPayload.userId; // Беремо ID юзера з токена
-            const dto = req.body; // Дані для оновлення
+            const userId = req.res.locals.tokenPayload.userId;
+            const dto = req.body;
             const updatedPost = await postService.updateMe(userId, dto);
             res.status(200).json(updatedPost);
         } catch (e) {

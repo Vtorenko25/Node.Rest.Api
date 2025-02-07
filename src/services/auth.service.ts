@@ -52,7 +52,7 @@ class AuthService {
       throw new ApiError("Invalid token", 401);
     }
 
-    await tokenRepository.deleteOne({ accessToken }); // Видаляємо токен із БД
+    await tokenRepository.deleteOne({ accessToken });
   }
 
   public async refresh(

@@ -19,11 +19,14 @@ router.post(
   authController.signIn,
 );
 
-router.post("/refresh",
+router.post(
+    "/refresh",
     authMiddleware.checkAccessToken,
-    authController.refresh);
+    authController.refresh
+);
 
-router.post("/log-out",
+router.post(
+    "/log-out",
     authMiddleware.checkAccessToken,
     authController.logout
 );

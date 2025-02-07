@@ -27,8 +27,8 @@ class UserController {
 
   public async getMe(req: Request, res: Response, next: NextFunction) {
     try {
-      const tokenPeyload = req.res.locals.tokenPeyload as ITokenPayload;
-      const result = await userService.getMe(tokenPeyload);
+      const tokenPayload = req.res.locals.tokenPeyload as ITokenPayload;
+      const result = await userService.getMe(tokenPayload);
       res.status(200).json(result);
     } catch (e) {
       next(e);

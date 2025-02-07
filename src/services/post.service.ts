@@ -13,11 +13,11 @@ class PostService {
     }
 
     public async deleteMe(userId: string): Promise<void> {
-        const post = await postRepository.getUserPost(userId); // Пошук поста за _userId
+        const post = await postRepository.getUserPost(userId);
         if (!post) {
             throw new ApiError("Post not found", 404);
         }
-        await postRepository.deleteByUserId(userId); // Видалення поста за _userId
+        await postRepository.deleteByUserId(userId);
     }
 
     public async updateMe(userId: string, dto: Partial<IPost>): Promise<IPost> {
