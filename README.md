@@ -59,7 +59,7 @@ API
    GET users?name=john
    Опис: (необхідна авторизація через JWT)
 6. Фільтрація користувача по email
-   GET users?email=john@example.com
+   GET users/getMeEmail?email=Johnfffddf@gmail.com
    Опис: (необхідна авторизація через JWT)
 7. Пошук користувача по id
    GET users/:id

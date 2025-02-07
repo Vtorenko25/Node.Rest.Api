@@ -37,11 +37,11 @@ class UserController {
 
   public async getMeEmail(req: Request, res: Response, next: NextFunction) {
     try {
-      const { userEmail } = req.params;
-      if (!userEmail) {
+      const { email } = req.query;  // Використовуємо query параметр
+      if (!email) {
         return res.status(400).json({ message: "Email is required" });
       }
-      const user = await userService.getByEmail(userEmail);
+      const user = await userService.getByEmail(email as string);  // Переводимо в тип string
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }

@@ -20,9 +20,9 @@ router.get(
   userController.getMe,
 );
 router.get(
-  "/getMeEmail/:userEmail/",
-  authMiddleware.checkAccessToken,
-  userController.getMeEmail.bind(userController),
+    "/getMeEmail",
+    authMiddleware.checkAccessToken,
+    userController.getMeEmail.bind(userController),
 );
 
 router.put(
