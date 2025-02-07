@@ -24,13 +24,12 @@ class AuthMiddleware {
             if(!pair){
                 throw new ApiError('Invalid token', 401);
             }
-            req.res.locals.tokenPayload = tokenPayload;
+            res.locals.tokenPayload = tokenPayload;
             next();
         } catch(e){
             next(e);
         }
     }
-
 
     public async checkRefreshToken(req: Request, res: Response, next: NextFunction) {
         try{
