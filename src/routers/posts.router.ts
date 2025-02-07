@@ -3,28 +3,26 @@ import {postController} from "../controlers/posts.controler";
 import {authMiddleware} from "../middlewares/auth.middleware";
 
 
+
 const router = Router();
 
-router.post(
+router.get(
     "/",
-    // commonMiddleware.validateBody(UserValidator.create),
-    // authController.singUp,
+    postController.getList,
 );
 router.post("/create",
     authMiddleware.checkAccessToken,
     postController.create
 );
 
-// router.post(
-//     "/sign-in",
-//     commonMiddleware.validateBody(UserValidator.login),
-//     authController.signIn,
-// );
-//
-// router.post("/refresh",
-//     authMiddleware.checkAccessToken,
-//     authController.refresh);
-//
-// router.post("/log-out", authMiddleware.checkAccessToken, authController.logout);
+router.delete("/me",
+    authMiddleware.checkAccessToken,
+    postController.deleteMe
+);
+
+router.put("/me",
+    authMiddleware.checkAccessToken,
+    postController.updateMe
+    )
 
 export const postsRouter = router;
