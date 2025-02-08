@@ -37,11 +37,11 @@ class UserController {
 
   public async getMeEmail(req: Request, res: Response, next: NextFunction) {
     try {
-      const { email } = req.query;  // Використовуємо query параметр
+      const { email } = req.query;
       if (!email) {
         return res.status(400).json({ message: "Email is required" });
       }
-      const user = await userService.getByEmail(email as string);  // Переводимо в тип string
+      const user = await userService.getByEmail(email as string);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
@@ -53,11 +53,43 @@ class UserController {
 
   public async getByName(req: Request, res: Response, next: NextFunction) {
     try {
-      const { name } = req.query;  // Отримуємо параметр name з query
+      const { name } = req.query;
       if (!name) {
         return res.status(400).json({ message: "Name is required" });
       }
-      const users = await userService.getListByName(name as string);  // Викликаємо сервіс для пошуку
+      const users = await userService.getListByName(name as string);
+      if (users.length === 0) {
+        return res.status(404).json({ message: "No users found" });
+      }
+      res.status(200).json(users);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async getByAge(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { age } = req.query;
+      if (!age) {
+        return res.status(400).json({ message: "Age is required" });
+      }
+      const users = await userService.getListByAge(Number(age));
+      if (users.length === 0) {
+        return res.status(404).json({ message: "No users found" });
+      }
+      res.status(200).json(users);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async getByPhone(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { phone } = req.query;
+      if (!phone) {
+        return res.status(400).json({ message: "Phone is required" });
+      }
+      const users = await userService.getListByPhone(phone as string);
       if (users.length === 0) {
         return res.status(404).json({ message: "No users found" });
       }

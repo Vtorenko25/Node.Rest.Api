@@ -7,11 +7,7 @@ import { UserValidator } from "../validators/user.validator";
 
 const router = Router();
 
-router.get(
-    "/",
-    authMiddleware.checkAccessToken,
-    userController.getList
-);
+router.get("/", authMiddleware.checkAccessToken, userController.getList);
 
 router.get(
   "/me",
@@ -20,15 +16,25 @@ router.get(
   userController.getMe,
 );
 router.get(
-    "/getMeEmail",
-    authMiddleware.checkAccessToken,
-    userController.getMeEmail.bind(userController),
+  "/getMeEmail",
+  authMiddleware.checkAccessToken,
+  userController.getMeEmail.bind(userController),
+);
+router.get(
+  "/getByAge",
+  authMiddleware.checkAccessToken,
+  userController.getByAge.bind(userController),
 );
 
 router.get(
-    "/getByName",
-    authMiddleware.checkAccessToken,
-    userController.getByName.bind(userController),
+  "/getByPhone",
+  authMiddleware.checkAccessToken,
+  userController.getByPhone.bind(userController),
+);
+router.get(
+  "/getByName",
+  authMiddleware.checkAccessToken,
+  userController.getByName.bind(userController),
 );
 
 router.put(
@@ -38,11 +44,7 @@ router.put(
   userController.updateMe,
 );
 
-router.delete(
-    "/me",
-    authMiddleware.checkAccessToken,
-    userController.deleteMe
-);
+router.delete("/me", authMiddleware.checkAccessToken, userController.deleteMe);
 
 router.get(
   "/:userId",
@@ -50,6 +52,5 @@ router.get(
   commonMiddleware.isIdValid("userId"),
   userController.getUserById,
 );
-
 
 export const userRouter = router;

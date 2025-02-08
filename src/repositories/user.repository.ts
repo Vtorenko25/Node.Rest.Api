@@ -1,11 +1,11 @@
 import { FilterQuery } from "mongoose";
+
 import {
   IUser,
   IUserCreateDto,
   IUserUpdateDto,
 } from "../interfaces/user.interface";
 import { User } from "../models/user.model";
-
 
 class UserRepository {
   public async getList(query): Promise<IUser[]> {
@@ -15,7 +15,6 @@ class UserRepository {
         { name: { $regex: query.search, $options: "i" } },
         { email: { $regex: query.search, $options: "i" } },
       ];
-
     }
     return await User.find(filterObj);
   }
@@ -33,7 +32,21 @@ class UserRepository {
   }
 
   public async getByName(name: string): Promise<IUser[]> {
-    return await User.find({ name: { $regex: name, $options: "i" }, isDeleted: false });
+    return await User.find({
+      name: { $regex: name, $options: "i" },
+      isDeleted: false,
+    });
+  }
+
+  public async getByAge(age: number): Promise<IUser[]> {
+    return await User.find({ age, isDeleted: false });
+  }
+
+  public async getByPhone(phone: string): Promise<IUser[]> {
+    return await User.find({
+      phone: { $regex: phone, $options: "i" },
+      isDeleted: false,
+    });
   }
 
   public async updateById(userId: string, dto: IUserUpdateDto): Promise<IUser> {
@@ -43,7 +56,6 @@ class UserRepository {
   public async deleteById(userId: string): Promise<void> {
     await User.deleteOne({ _id: userId });
   }
-
 }
 
 export const userRepository = new UserRepository();

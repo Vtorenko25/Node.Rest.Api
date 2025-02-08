@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 
 import { ApiError } from "../errors/api.error";
-import {ILogin, IUserCreateDto} from "../interfaces/user.interface";
+import { ITokenPayload } from "../interfaces/token.interface";
+import { ILogin, IUserCreateDto } from "../interfaces/user.interface";
 import { authService } from "../services/auth.service";
-import {ITokenPayload} from "../interfaces/token.interface";
 
 class AuthControler {
   public async singUp(req: Request, res: Response, next: NextFunction) {

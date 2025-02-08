@@ -1,6 +1,6 @@
 import { ApiError } from "../errors/api.error";
-import {ITokenPair, ITokenPayload} from "../interfaces/token.interface";
-import {ILogin, IUser, IUserCreateDto} from "../interfaces/user.interface";
+import { ITokenPair, ITokenPayload } from "../interfaces/token.interface";
+import { ILogin, IUser, IUserCreateDto } from "../interfaces/user.interface";
 import { tokenRepository } from "../repositories/token.repository";
 import { userRepository } from "../repositories/user.repository";
 import { passwordService } from "./password.service";
@@ -8,9 +8,7 @@ import { tokenService } from "./token.service";
 import { userService } from "./user.service";
 
 class AuthService {
-  public async singUp(
-    dto: IUserCreateDto,
-  ): Promise<{ user: IUser; tokens: ITokenPair }> {
+  public async singUp(dto: IUserCreateDto): Promise<{ user: IUser }> {
     await userService.isEmailUnique(dto.email);
     const password = await passwordService.hashPassword(dto.password);
     const user = await userRepository.create({ ...dto, password });
@@ -19,10 +17,12 @@ class AuthService {
       role: user.role,
     });
     await tokenRepository.create({ ...tokens, _userId: user._id });
-    return { user, tokens };
+    return { user };
   }
 
-  public async signIn(dto: ILogin): Promise<{ user: IUser; tokens: ITokenPair }> {
+  public async signIn(
+    dto: ILogin,
+  ): Promise<{ user: IUser; tokens: ITokenPair }> {
     const user = await userRepository.getByEmail(dto.email);
     if (!user) {
       throw new ApiError("User not found", 404);
@@ -56,16 +56,16 @@ class AuthService {
   }
 
   public async refresh(
-      tokenPayload:ITokenPayload,
-      refreshToken:string
-  ):Promise<ITokenPair>{
+    tokenPayload: ITokenPayload,
+    refreshToken: string,
+  ): Promise<ITokenPair> {
     await tokenRepository.deleteOneByParams({ refreshToken });
     const tokens = tokenService.generateToken({
       userId: tokenPayload.userId,
       role: tokenPayload.role,
     });
     await tokenRepository.create({ ...tokens, _userId: tokenPayload.userId });
-    return  tokens;
+    return tokens;
   }
 }
 
