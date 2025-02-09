@@ -2,14 +2,23 @@ import { ApiError } from "../errors/api.error";
 import { ITokenPayload } from "../interfaces/token.interface";
 import { IUser, IUserUpdateDto } from "../interfaces/user.interface";
 import { userRepository } from "../repositories/user.repository";
+import {FilterQuery} from "mongoose";
 
 class UserService {
   public async getList(query): Promise<IUser[]> {
-    const users = await userRepository.getList(query);
-    if (!users) {
-      throw new ApiError("user not found", 404);
+    const filterObj: FilterQuery<IUser> = { isDeleted: false };
+
+    if (query.name) {
+      filterObj.name = { $regex: query.name, $options: "i" };
     }
-    return users;
+    if (query.age) {
+      filterObj.age = Number(query.age);
+    }
+    if (query.phone) {
+      filterObj.phone = query.phone;
+    }
+
+    return await userRepository.getList(filterObj);
   }
 
   public async getUserById(userId: string): Promise<IUser> {
@@ -22,30 +31,6 @@ class UserService {
 
   public async getByEmail(email: string): Promise<IUser> {
     const user = await userRepository.getByEmail(email);
-    if (!user) {
-      throw new ApiError("user not found", 404);
-    }
-    return user;
-  }
-
-  public async getListByName(name: string): Promise<IUser[]> {
-    const user = await userRepository.getByName(name);
-    if (!user) {
-      throw new ApiError("user not found", 404);
-    }
-    return user;
-  }
-
-  public async getListByAge(age: number): Promise<IUser[]> {
-    const user = await userRepository.getByAge(age);
-    if (!user) {
-      throw new ApiError("user not found", 404);
-    }
-    return user;
-  }
-
-  public async getListByPhone(phone: string): Promise<IUser[]> {
-    const user = await userRepository.getByPhone(phone);
     if (!user) {
       throw new ApiError("user not found", 404);
     }

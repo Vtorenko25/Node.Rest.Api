@@ -21,6 +21,7 @@ API підтримує авторизацію через JWT, роботу з к
 3. npm install
 4. Створіть файл .env у корені проекту та налаштуйте його:
 PORT=
+MONGO_DB_URL=
 JWT_ACCESS_SECRET=
 JWT_ACCESS_EXPIRES_IN=
 JWT_REFRESH_SECRET=
@@ -71,16 +72,16 @@ REST API
 4. Отримати список всіх user
    GET /users/
 5. Фільтрація користувача по імені
-   GET users/getByName?name=john
+   GET users?name=john
    Опис: (необхідна авторизація через JWT)
 6. Фільтрація користувача по email
-   GET users/getMeEmail?email=Johnfffddf@gmail.com
+   GET users?email=Johnfffddf@gmail.com
    Опис: (необхідна авторизація через JWT)
 7. Фільтрація користувача по age
-   GET users/getByAge?age=25
+   GET users?age=25
    Опис: (необхідна авторизація через JWT)
 8. Фільтрація користувача по phone
-   GET users/getByPhone?phone=1234567890
+   GET users?phone=1234567890
    Опис: (необхідна авторизація через JWT)
 9. Пошук користувача по id
    GET users/:id

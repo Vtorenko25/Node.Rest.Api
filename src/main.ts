@@ -4,7 +4,6 @@ import swaggerUi from "swagger-ui-express";
 
 import swaggerDocument from "../docs/swagger.json";
 import { config } from "./configs/config";
-import { MONGO_DB_URL } from "./constants/url.constant";
 import { ApiError } from "./errors/api.error";
 import { authRouter } from "./routers/auth.router";
 import { postsRouter } from "./routers/posts.router";
@@ -34,6 +33,6 @@ process.on("uncaughtException", (error) => {
 });
 
 app.listen(config.port, async () => {
-  await mongoose.connect(MONGO_DB_URL);
+  await mongoose.connect(config.mongoUrl);
   console.log(`Server has been started on port ${config.port}`);
 });
