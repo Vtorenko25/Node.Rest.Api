@@ -19,18 +19,15 @@ class TokenService {
   public verifyToken(token: string, type: TokenTypeEnum): ITokenPayload {
     try {
       let secret: string;
-      switch (type) {
-      case "access":
+      if (type === "access") {
         secret = config.jwtAccessSecret;
-        break;
-      case "refresh":
+      } else if (type === "refresh") {
         secret = config.jwtRefreshSecret;
-        break;
-      default:
-          throw new ApiError("Invalid token type", 401);
+      } else {
+        throw new ApiError("Invalid token type", 401);
       }
       return jwt.verify(token, secret) as ITokenPayload;
-    } catch (error) {
+    } catch {
       throw new ApiError("Invalid token type", 401);
     }
   }

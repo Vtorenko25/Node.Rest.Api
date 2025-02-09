@@ -22,12 +22,18 @@ class CommonMiddleware {
   public validateBody(validator: ObjectSchema) {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
-        req.body = await validator.validateAsync(req.body, { abortEarly: false });
+        req.body = await validator.validateAsync(req.body, {
+          abortEarly: false,
+        });
         next();
       } catch (e) {
         const errorMessages = e.details.map(({ context, type }) => ({
           field: context?.label,
-          message: this.getValidationMessage(context?.label, type, req.body[context?.label]),
+          message: this.getValidationMessage(
+            context?.label,
+            type,
+            req.body[context?.label],
+          ),
         }));
 
         res.status(400).json({
@@ -39,7 +45,11 @@ class CommonMiddleware {
     };
   }
 
-  private getValidationMessage(field: string, type: string, value: any): string {
+  private getValidationMessage(
+    field: string,
+    type: string,
+    value: any,
+  ): string {
     const examples: Record<string, string> = {
       email: "example@mail.com",
       password: "Aa123456!",
@@ -60,7 +70,6 @@ class CommonMiddleware {
     }
     return messages[type] || `Invalid value for "${field}".`;
   }
-
 }
 
 export const commonMiddleware = new CommonMiddleware();

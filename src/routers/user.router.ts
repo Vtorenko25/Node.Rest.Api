@@ -7,11 +7,7 @@ import { UserValidator } from "../validators/user.validator";
 
 const router = Router();
 
-router.get(
-    "/",
-    authMiddleware.checkAccessToken,
-    userController.getList
-);
+router.get("/", authMiddleware.checkAccessToken, userController.getList);
 
 router.get(
   "/me",
@@ -21,27 +17,24 @@ router.get(
 );
 
 router.put(
-    "/me",
-    authMiddleware.checkAccessToken,
-    commonMiddleware.validateBody(UserValidator.update),
-    userController.updateMe,
+  "/me",
+  authMiddleware.checkAccessToken,
+  commonMiddleware.validateBody(UserValidator.update),
+  userController.updateMe,
 );
 
-router.delete("/me",
-    authMiddleware.checkAccessToken,
-    userController.deleteMe
-);
+router.delete("/me", authMiddleware.checkAccessToken, userController.deleteMe);
 router.get(
-    "/:email",
-    authMiddleware.checkAccessToken,
-    userController.getUserByEmail,
+  "/:email",
+  authMiddleware.checkAccessToken,
+  userController.getUserByEmail,
 );
 
 router.get(
-    "/:userId",
-    authMiddleware.checkAccessToken,
-    commonMiddleware.isIdValid("userId"),
-    userController.getUserById,
+  "/:userId",
+  authMiddleware.checkAccessToken,
+  commonMiddleware.isIdValid("userId"),
+  userController.getUserById,
 );
 
 export const userRouter = router;

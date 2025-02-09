@@ -35,7 +35,11 @@ class UserController {
     }
   }
 
-  public async getUserByEmail(req: Request, res: Response, next: NextFunction): Promise<void> {
+  public async getUserByEmail(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { email } = req.params;
       const user = await userService.getByEmail(email);

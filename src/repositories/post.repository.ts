@@ -6,7 +6,7 @@ class PostRepository {
     try {
       const posts = await Post.find({ isDeleted: false });
       return posts;
-    } catch (error) {
+    } catch {
       throw new Error("Failed to retrieve posts");
     }
   }

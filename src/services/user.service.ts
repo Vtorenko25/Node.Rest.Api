@@ -1,8 +1,9 @@
+import { FilterQuery } from "mongoose";
+
 import { ApiError } from "../errors/api.error";
 import { ITokenPayload } from "../interfaces/token.interface";
 import { IUser, IUserUpdateDto } from "../interfaces/user.interface";
 import { userRepository } from "../repositories/user.repository";
-import {FilterQuery} from "mongoose";
 
 class UserService {
   public async getList(query): Promise<IUser[]> {
