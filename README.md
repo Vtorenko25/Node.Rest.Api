@@ -18,8 +18,8 @@ API підтримує авторизацію через JWT, роботу з к
 1. Клонуйте репозиторій:
    git clone https://github.com/Vtorenko25/Node.Rest.Api.git
 2. cd Node.Rest.Api
-3. npm install
-4. Створіть файл .env у корені проекту та налаштуйте його:
+
+3. Створіть файл .env у корені проекту та налаштуйте його:
 PORT=
 MONGO_DB_URL=
 JWT_ACCESS_SECRET=
@@ -30,6 +30,8 @@ JWT_REFRESH_EXPIRES_IN=
 Проект запустить сервер на порту, вказаному в .env файлі (за замовчуванням — порт 3000).
 
 ## Запуск проекту
+
+npm install
 
 npm run start:dev
 
